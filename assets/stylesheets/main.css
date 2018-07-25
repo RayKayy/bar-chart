@@ -1,0 +1,20 @@
+.bar {
+  display: inline-block;
+  width: 10%;
+  background-color: blue;
+  height: 100px;
+  margin: 0 auto;
+}
+.box {
+  margin: 0 auto;
+  width: 95%;
+  background-color: silver;
+  height: 500px;
+}
+.bar2 {
+  display: inline-block;
+  width: 10%;
+  background-color: red;
+  height: 100px;
+  margin: 0 auto;
+}
