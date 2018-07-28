@@ -1,20 +1,58 @@
-.bar {
-  display: inline-block;
-  width: 10%;
-  background-color: blue;
-  height: 100px;
-  margin: 0 auto;
-}
 .box {
+  position: relative;
   margin: 0 auto;
   width: 95%;
   background-color: silver;
   height: 500px;
 }
-.bar2 {
+
+.hidden {
+  display: none;
+}
+
+.bar:hover {
+  opacity: 0.5
+}
+
+.bar:hover .hidden {
+  display: table;
+  margin: auto;
+  z-index: 100;
+  background-color: white;
+  position: relative;
+  bottom: 30px;
+  border-radius: 3px;
+  box-shadow: 3px 3px 2px black;
+}
+
+#a {
   display: inline-block;
-  width: 10%;
+  width: 25px;
   background-color: red;
-  height: 100px;
-  margin: 0 auto;
+  height: 5px;
+  margin-left: 5px;
+  position: absolute;
+  bottom: 0;
+}
+
+#b {
+  display: inline-block;
+  width: 25px;
+  background-color: blue;
+  height: 10px;
+  margin-left: 5px;
+  position: absolute;
+  bottom: 0;
+  left: 30px;
+}
+
+#c {
+  display: inline-block;
+  width: 25px;
+  background-color: green;
+  height: 150px;
+  margin-left: 5px;
+  position: absolute;
+  bottom: 0;
+  left: 60px;
 }
