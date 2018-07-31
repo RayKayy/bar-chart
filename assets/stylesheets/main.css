@@ -7,16 +7,9 @@
 }
 
 .hidden {
-  display: none;
-}
-
-.bar:hover {
-  opacity: 0.5
-}
-
-.bar:hover .hidden {
-  display: table;
-  margin: auto;
+  opacity: 0;
+  display: block;
+  text-align: center;
   z-index: 100;
   background-color: white;
   position: relative;
@@ -25,34 +18,74 @@
   box-shadow: 3px 3px 2px black;
 }
 
+.bar {
+  animation-name: grow;
+  animation-duration: 500ms;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+}
+
+/*@keyframes grow {
+  0% {
+    height: 0%;
+  }
+}*/
+
+.bar:hover {
+  animation-name: opacity;
+  animation-duration: 500ms;
+  animation-fill-mode: forwards;
+}
+
+@keyframes opacity {
+  100% {
+    opacity: 0.5;
+  }
+}
+
+
+.bar:hover .hidden {
+  animation-name: appear;
+  animation-duration: 500ms;
+  animation-fill-mode: forwards;
+}
+
+@keyframes appear {
+  100% {
+    opacity: 1;
+  }
+}
+
 #a {
   display: inline-block;
-  width: 25px;
+  width: 14.28%;
   background-color: red;
   height: 5px;
-  margin-left: 5px;
-  position: absolute;
+/*  margin-left: 5px;
+*/  position: absolute;
   bottom: 0;
+  left: 14.28%;
+
 }
 
 #b {
   display: inline-block;
-  width: 25px;
+  width: 14.28%;
   background-color: blue;
   height: 10px;
-  margin-left: 5px;
-  position: absolute;
+/*  margin-left: 5px;
+*/  position: absolute;
   bottom: 0;
-  left: 30px;
+  left: 42.85%;
 }
 
 #c {
   display: inline-block;
-  width: 25px;
+  width: 14.28%;
   background-color: green;
   height: 150px;
-  margin-left: 5px;
+  /*margin-left: 5px;*/
   position: absolute;
   bottom: 0;
-  left: 60px;
+  left: 71.41%;
 }
