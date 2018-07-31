@@ -1,4 +1,8 @@
-.box {
+body {
+  font-family: "Ubuntu"
+}
+
+#chart {
   position: relative;
   margin: 0 auto;
   width: 95%;
@@ -20,18 +24,18 @@
 
 .bar {
   animation-name: grow;
-  animation-duration: 500ms;
+  animation-duration: 1000ms;
   animation-fill-mode: forwards;
-  animation-iteration-count: 1;
+  /*animation-iteration-count: 2;*/
 }
 
-/*@keyframes grow {
+@keyframes grow {
   0% {
     height: 0%;
   }
-}*/
+}
 
-.bar:hover {
+/*.bar:hover {
   animation-name: opacity;
   animation-duration: 500ms;
   animation-fill-mode: forwards;
@@ -54,7 +58,7 @@
   100% {
     opacity: 1;
   }
-}
+}*/
 
 #a {
   display: inline-block;
