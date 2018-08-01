@@ -1,23 +1,28 @@
+//Variables for testing/debugging.
+var labels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
+var testd = [1000, 2345, 888, 789, 3456, 7892, 1111, 7321];
+
 
 //Takes in data: array, options: object, element: DOM element.
 //And generates a bar-chart accordingly.
-function drawBarChart(data, element = "#chart", options) {
+function drawBarChart(data, element = "#chart", options = "default") {
 
   //Clears chart
   clearBarChart(element);
   //Creates and display y-axis
   let yAxis = genY(getScale(data));
   $(element).append(yAxis);
-  //Creates and display bars
+  //Creates and display bars, values and labels accordingly.
   let bars = genBars(data);
   styleBars(bars, getScale(data));
-  styleValue();
   $(element).append(bars);
+  styleValue();
   //Adds shadow to bars on mousein event
   barShadow();
+  //promptColor();
 
 
-};
+}
 
 //Clears the charting area by removing appended bars.
 function clearBarChart(element = "#chart") {
@@ -25,17 +30,19 @@ function clearBarChart(element = "#chart") {
 }
 
 
-//Generate an array of <div id="i" class="bar">value</div> to be appended within DOM element using array of values.
-const genBars = (data) => {
+//Generate an array of div.bar elements nested with .bar.value and .bar.label to be appended within DOM element using array of values.
+//Label is an array of string or values to be associated with the bar.
+const genBars = (values, label = labels) => {
 
   let bar;
   let barsArr = [];
 
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0; i < values.length; i++) {
     bar = $("<div></div>");
-    $(bar).attr("id", i);
+    $(bar).attr("id", "bar-"+i);
     $(bar).attr("class", "bar");
-    $(bar).html("<div class='value'>"+data[i]+"</div>");
+    $(bar).append("<div class='value'>"+values[i]+"</div>");
+    $(bar).append("<div class='label'>"+label[i]+"</div>");
     barsArr.push(bar);
   }
   return barsArr;
@@ -50,6 +57,7 @@ const styleBars = (arr, scale, color = "#B8CEFF") => {
   let max = scale;
   let value;
   let height;
+  //let step = 5;
 
   for (let i in arr) {
     value = $($(arr[i]).html()).html();
@@ -62,18 +70,45 @@ const styleBars = (arr, scale, color = "#B8CEFF") => {
     "bottom": 0,
     "left": gap + "%",
     "background": color,
+    "color": color
     });
     gap += width * 2;
   }
-}
+};
 
-const styleValue = (pos = "center") => {
-  $(".value").css({
-    "height": "100%",
-    "line-height": "100%",
-    "text-align": "center"
-  });
-}
+const styleValue = (pos = "center", color = "black") => {
+  if (pos === "center") {
+    $(".value").css({
+      "color": color,
+      "width": "100%",
+      "text-align": "center",
+      "position": "absolute",
+      "bottom": "45%",
+      "top": ""
+    });
+  }
+  else if (pos === "top") {
+    $(".value").css({
+      "color": color,
+      "width": "100%",
+      "text-align": "center",
+      "position": "absolute",
+      "bottom": "",
+      "top": 0
+    });
+  }
+  else if (pos === "bottom") {
+    $(".value").css({
+      "color": color,
+      "width": "100%",
+      "text-align": "center",
+      "position": "absolute",
+      "bottom": 0,
+      "top": ""
+    });
+  }
+
+};
 
 //Helper function to get the Maximum value out of data set. And find the y-axis scale accordingly.
 const getScale = (arr) => {
@@ -89,7 +124,7 @@ const getScale = (arr) => {
   else {
     return 1000 * Math.ceil(max / 1000);
   }
-}
+};
 
 //Helper function to generate a list of DOM elements for the y-axis.
 const genY = (max, num = 10) => {
@@ -122,7 +157,7 @@ const genY = (max, num = 10) => {
 
   return y;
 
-}
+};
 
 //Function to customize the barchart title.
 const chartTitle = (title = "Bar Chart", color = "#F4F5F2", size = "2em") => {
@@ -131,26 +166,40 @@ const chartTitle = (title = "Bar Chart", color = "#F4F5F2", size = "2em") => {
     "color": color,
     "font-size": size
   });
-}
+};
 
 //Hover Shadow
 const barShadow = () => {
   $(".bar").mouseenter((e) => {
-    if ($(e.target).is(".bar")) {
-      $(e.target).css("box-shadow", "0 0 20px grey");
-      //console.log("in");
-    }
-    else {
-      $($(e.target).parent()).css("box-shadow", "0 0 20px grey");
-    }
+    $(e.currentTarget).css("box-shadow", "0 0 20px grey");
   });
 
-  $(".bar").on("mouseleave", (e) => {
-      $(e.target).css("box-shadow", "");
-      $($(e.target).parent()).css("box-shadow", "");
-      //console.log("out");
+  $(".bar").mouseleave((e) => {
+    $(e.currentTarget).css("box-shadow", "");
+  });
+};
+
+//Change Color thorugh window prompt.
+const promptCustomize = (input) => {
+  if (input == "on") {
+    $(".label").click((e) => {
+      let color = prompt("Label/Bar - Please enter the hexadecimal, RGB, or color name:");
+      if (color !== "") {
+        $(e.currentTarget).css("color", color);
+        $(e.currentTarget).parent().css("background", color);
+      }
     });
-}
+    $(".value").click((e) => {
+      let color = prompt("Value - Please enter the hexadecimal, RGB, or color name:");
+      if (color !== "") {
+        $(e.currentTarget).css("color", color);
+      }
+    });
+  }
+  else if (input == "off") {
+    $(".label, .value").off();
+  }
+};
 
 
 
