@@ -1,16 +1,21 @@
 
 //Takes in data: array, options: object, element: DOM element.
-//And generates a barchar accordingly.
+//And generates a bar-chart accordingly.
 function drawBarChart(data, element = "#chart", options) {
 
+  //Clears chart
   clearBarChart(element);
-
+  //Creates and display y-axis
   let yAxis = genY(getScale(data));
   $(element).append(yAxis);
-
+  //Creates and display bars
   let bars = genBars(data);
   styleBars(bars, getScale(data));
+  styleValue();
   $(element).append(bars);
+  //Adds shadow to bars on mousein event
+  barShadow();
+
 
 };
 
@@ -30,36 +35,44 @@ const genBars = (data) => {
     bar = $("<div></div>");
     $(bar).attr("id", i);
     $(bar).attr("class", "bar");
-    $(bar).html(data[i]);
+    $(bar).html("<div class='value'>"+data[i]+"</div>");
     barsArr.push(bar);
   }
   return barsArr;
 };
 
 //Style an array of DOM elements using jQuery according to data set.
-const styleBars = (arr, scale, align = "center") => {
+const styleBars = (arr, scale, color = "#B8CEFF") => {
 
   let width = 100 / ((arr.length * 2) + 1);
   let cssW = width + "%";
   let gap = width;
   let max = scale;
+  let value;
   let height;
 
   for (let i in arr) {
-    height = ($(arr[i]).html() / max) * 100;
+    value = $($(arr[i]).html()).html();
+    height = (value / max) * 100;
     $(arr[i]).css({
     "display": "inline-block",
     "width": cssW,
     "height": height + "%",
-    "text-align": align,
     "position": "absolute",
     "bottom": 0,
     "left": gap + "%",
-    "background": "white",
-    "box-shadow": "5px 0 10px grey"
+    "background": color,
     });
     gap += width * 2;
   }
+}
+
+const styleValue = (pos = "center") => {
+  $(".value").css({
+    "height": "100%",
+    "line-height": "100%",
+    "text-align": "center"
+  });
 }
 
 //Helper function to get the Maximum value out of data set. And find the y-axis scale accordingly.
@@ -70,7 +83,7 @@ const getScale = (arr) => {
   if (max < 100) {
     return 10 * Math.ceil(max / 10);
   }
-  else if (max < 1000) {
+  else if (max < 5000) {
     return 100 * Math.ceil(max / 100);
   }
   else {
@@ -78,8 +91,8 @@ const getScale = (arr) => {
   }
 }
 
-//Draw y-axis
-const genY = (max, num = 4) => {
+//Helper function to generate a list of DOM elements for the y-axis.
+const genY = (max, num = 10) => {
 
   let y = [];
   let vertical = $("<div></div>");
@@ -100,8 +113,7 @@ const genY = (max, num = 4) => {
       "background": "black",
       "position": "absolute",
       "bottom": ((100 / num) * i) + "%",
-      "text-indent" : "3%",
-      "line-height": "-20%"
+      "text-indent" : "1%",
     });
     $(line).attr("class", "y");
     $(line).html(Math.round(step * i));
@@ -112,6 +124,33 @@ const genY = (max, num = 4) => {
 
 }
 
+//Function to customize the barchart title.
+const chartTitle = (title = "Bar Chart", color = "#F4F5F2", size = "2em") => {
+  $("#chart-title").html(title);
+  $("#chart-title").css({
+    "color": color,
+    "font-size": size
+  });
+}
+
+//Hover Shadow
+const barShadow = () => {
+  $(".bar").mouseenter((e) => {
+    if ($(e.target).is(".bar")) {
+      $(e.target).css("box-shadow", "0 0 20px grey");
+      //console.log("in");
+    }
+    else {
+      $($(e.target).parent()).css("box-shadow", "0 0 20px grey");
+    }
+  });
+
+  $(".bar").on("mouseleave", (e) => {
+      $(e.target).css("box-shadow", "");
+      $($(e.target).parent()).css("box-shadow", "");
+      //console.log("out");
+    });
+}
 
 
 
