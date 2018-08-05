@@ -2,7 +2,99 @@
 var labels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
 var testd = [1000, 2345, 888, 789, 3456, 7892, 1111, 7321];
 
+function drawStackedBarChart(data, element = "#chart", options) {
 
+  //Clears chart
+  clearBarChart(element);
+  //Create base chart array
+  let base = genBase(data);
+  //Creates and display y-axis
+  let yAxis = genY(getScale(base));
+  $(element).append(yAxis);
+  //Creates bars, values and labels accordingly.
+  let bars = genBars(base);
+  styleBars(bars, getScale(base));
+  //Create, style and append inner stacked bars
+  let sBars = genSBars(data);
+  styleSBars(bars, sBars);
+  appendSB(bars, sBars);
+
+  $(element).append(bars);
+  styleValue();
+  //Adds shadow to bars on mousein event
+  barShadow();
+
+
+
+}
+
+//Style the innser stacked bars according to their parent.
+const styleSBars = (bars, stacked) => {
+
+  let ov;
+  let iv;
+  let height;
+
+  for (let i = 0; i < bars.length; i++) {
+    ov = $($(bars[i]).html()).html();
+    for (let j = 0; j < stacked[i].length; j++) {
+      iv = $($(stacked[i][j]).html()).html();
+      height = (iv / ov) * 1000;
+      height = Math.ceil(height) / 10;
+      $(stacked[i][j]).css({
+        "height": height + "%",
+        "background": "pink"
+      });
+    }
+  }
+}
+
+
+//Append the inner stacked bars matching the main bars.
+const appendSB = (main, stacked) => {
+  for (let b in main) {
+    $(main[b]).append(stacked[b]);
+  }
+}
+
+//Generate an nested array of DOM elements.
+const genSBars = (sData) => {
+
+let sArr = [];
+
+for (let a in sData) {
+  sArr.push(genStack(sData[a]));
+}
+return sArr;
+}
+
+//Calculate the total value of each nested array; return an array of those values.
+const genBase = (data) => {
+
+  let base = data.map((a) => {
+    return a.reduce((t, cv) => {return t + cv});
+  });
+return base;
+}
+
+//Generate the inner elements of stacked bars.
+const genStack = (values) => {
+
+  let bar;
+  let stack = [];
+
+  for (let i = 0; i < values.length; i++) {
+    bar = $("<div></div>");
+    $(bar).attr("class", "stackedbar");
+    $(bar).append("<div class='ivalue'>"+values[i]+"</div>");
+    stack.push(bar);
+  }
+  return stack;
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 //Takes in data: array, options: object, element: DOM element.
 //And generates a bar-chart accordingly.
 function drawBarChart(data, element = "#chart", options = "default") {
@@ -19,7 +111,6 @@ function drawBarChart(data, element = "#chart", options = "default") {
   styleValue();
   //Adds shadow to bars on mousein event
   barShadow();
-  //promptColor();
 
 
 }
@@ -31,7 +122,7 @@ function clearBarChart(element = "#chart") {
 
 
 //Generate an array of div.bar elements nested with .bar.value and .bar.label to be appended within DOM element using array of values.
-//Label is an array of string or values to be associated with the bar.
+//Label is an array of strings or values to be associated with the bar.
 const genBars = (values, label = labels) => {
 
   let bar;
@@ -49,7 +140,7 @@ const genBars = (values, label = labels) => {
 };
 
 //Style an array of DOM elements using jQuery according to data set.
-const styleBars = (arr, scale, color = "#B8CEFF") => {
+const styleBars = (arr, scale, step = -1, color = "#B8CEFF") => {
 
   let width = 100 / ((arr.length * 2) + 1);
   let cssW = width + "%";
@@ -57,7 +148,6 @@ const styleBars = (arr, scale, color = "#B8CEFF") => {
   let max = scale;
   let value;
   let height;
-  //let step = 5;
 
   for (let i in arr) {
     value = $($(arr[i]).html()).html();
@@ -72,7 +162,12 @@ const styleBars = (arr, scale, color = "#B8CEFF") => {
     "background": color,
     "color": color
     });
-    gap += width * 2;
+    if (step < 0) {
+      gap += width + width;
+    }
+    else {
+      gap += width + step;
+    }
   }
 };
 
@@ -180,8 +275,17 @@ const barShadow = () => {
 };
 
 //Change Color thorugh window prompt.
-const promptCustomize = (input) => {
-  if (input == "on") {
+const promptCustomize = (id = "custom") => {
+
+  let customize = document.getElementById(id);
+
+  if (customize.checked) {
+    $("#chart-title").click((e) => {
+      let title = prompt("Enter new chart title:", $("#chart-title").html());
+      let color = prompt("Enter the hexadecimal, RGB, or color name:", $("#chart-title").css("color"));
+      let size = prompt("Enter new font size:", $("chart-title").css("font-size"));
+      chartTitle(title, color, size);
+    });
     $(".label").click((e) => {
       let color = prompt("Label/Bar - Please enter the hexadecimal, RGB, or color name:");
       if (color !== "") {
@@ -196,10 +300,25 @@ const promptCustomize = (input) => {
       }
     });
   }
-  else if (input == "off") {
-    $(".label, .value").off();
+  else {
+    $(".label, .value, #chart-title").off();
   }
-};
+}
+
+// const initButton = () => {
+
+//   let checkBox = document.getElementById("custom");
+
+//   if (checkBox.checked) {
+//     promptCustomize("on");
+//     console.log("on");
+//   }
+//   else {
+//     promptCustomize("off");
+//     console.log("off");
+//   }
+// }
+
 
 
 

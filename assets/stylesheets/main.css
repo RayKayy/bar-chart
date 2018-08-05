@@ -33,6 +33,14 @@ p {
   height: 75vh;
 }
 
+#custom {
+  margin-left: 2.5%;
+}
+
+.stackedbar {
+  z-index: 100;
+}
+
 .value {
   /*color: black;*/
   width: 100%;
@@ -64,7 +72,7 @@ p {
   }
 }
 
-.hidden {
+/*.hidden {
   opacity: 0;
   display: block;
   text-align: center;
@@ -74,7 +82,7 @@ p {
   bottom: 30px;
   border-radius: 3px;
   box-shadow: 3px 3px 2px black;
-}
+}*/
 
 .bar {
   animation-name: grow;
