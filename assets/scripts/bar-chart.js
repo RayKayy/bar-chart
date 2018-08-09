@@ -1,11 +1,24 @@
 //Variables for testing/debugging.
 var labels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
 var testd = [1000, 2345, 888, 789, 3456, 7892, 1111, 7321];
+var theme = ["#05668D", "#028090", "#00A896", "#00A896", "#F0F3BD"];
+var standard = {height: "75vh", width: "95%"};
+var chart = "#chart";
 
-function drawStackedBarChart(data, element = "#chart", options) {
+
+
+
+///////////////////////////////////////////////////////////////////
+//Main function to draw a stacked bar chart; based on the draw bar chart function.
+//Takes in a nested array as data, a DOM element as container and a js object as options.
+function drawStackedBarChart(data, element = $(chart), options = standard) {
 
   //Clears chart
   clearBarChart(element);
+  //Apply options.
+  for (let x in options) {
+    $(element).css(x, options[x]);
+  }
   //Create base chart array
   let base = genBase(data);
   //Creates and display y-axis
@@ -18,7 +31,7 @@ function drawStackedBarChart(data, element = "#chart", options) {
   let sBars = genSBars(data);
   styleSBars(bars, sBars);
   appendSB(bars, sBars);
-
+  //Append and display bars in container.
   $(element).append(bars);
   styleValue();
   //Adds shadow to bars on mousein event
@@ -43,7 +56,7 @@ const styleSBars = (bars, stacked) => {
       height = Math.ceil(height) / 10;
       $(stacked[i][j]).css({
         "height": height + "%",
-        "background": "pink"
+        "background": theme[j]
       });
     }
   }
@@ -97,10 +110,14 @@ const genStack = (values) => {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //Takes in data: array, options: object, element: DOM element.
 //And generates a bar-chart accordingly.
-function drawBarChart(data, element = "#chart", options = "default") {
+function drawBarChart(data, element = $(chart), options = standard) {
 
   //Clears chart
   clearBarChart(element);
+  //Apply options.
+  for (let x in options) {
+    $(element).css(x, options[x]);
+  }
   //Creates and display y-axis
   let yAxis = genY(getScale(data));
   $(element).append(yAxis);
@@ -116,7 +133,7 @@ function drawBarChart(data, element = "#chart", options = "default") {
 }
 
 //Clears the charting area by removing appended bars.
-function clearBarChart(element = "#chart") {
+function clearBarChart(element = $(chart)) {
   $(element).empty();
 }
 
@@ -171,6 +188,7 @@ const styleBars = (arr, scale, step = -1, color = "#B8CEFF") => {
   }
 };
 
+//Helper function used to style values.
 const styleValue = (pos = "center", color = "black") => {
   if (pos === "center") {
     $(".value").css({
@@ -272,6 +290,19 @@ const barShadow = () => {
   $(".bar").mouseleave((e) => {
     $(e.currentTarget).css("box-shadow", "");
   });
+  $(".stackedbar").mouseenter((e) => {
+    $(e.currentTarget).css({
+      "box-shadow": "0 0 30px grey",
+      "z-index": "100"
+      });
+  });
+
+  $(".stackedbar").mouseleave((e) => {
+    $(e.currentTarget).css({
+      "box-shadow": "",
+      "z-index": ""
+    });
+  });
 };
 
 //Change Color thorugh window prompt.
@@ -299,25 +330,24 @@ const promptCustomize = (id = "custom") => {
         $(e.currentTarget).css("color", color);
       }
     });
+    $(".stackedbar").click((e) => {
+      let color = prompt("Bar Section - Please enter the hexadecimal, RGB, or color name:");
+      if (color !== "") {
+        $(e.currentTarget).css("background", color);
+      }
+    });
+    $(".ivalue").click((e) => {
+      let color = prompt("Inner Value - Please enter the hexadecimal, RGB, or color name:");
+      if (color !== "") {
+        $(e.currentTarget).css("color", color);
+      }
+      e.stopPropagation();
+    });
   }
   else {
-    $(".label, .value, #chart-title").off();
+    $(".stackedbar, .ivalue, .label, .value, #chart-title").off();
   }
 }
-
-// const initButton = () => {
-
-//   let checkBox = document.getElementById("custom");
-
-//   if (checkBox.checked) {
-//     promptCustomize("on");
-//     console.log("on");
-//   }
-//   else {
-//     promptCustomize("off");
-//     console.log("off");
-//   }
-// }
 
 
 
