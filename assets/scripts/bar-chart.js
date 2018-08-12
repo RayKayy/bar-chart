@@ -1,9 +1,9 @@
 //Variables for testing/debugging.
-var labels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
-var testd = [1000, 2345, 888, 789, 3456, 7892, 1111, 7321];
-var theme = ["#05668D", "#028090", "#00A896", "#00A896", "#F0F3BD"];
-var standard = {height: "75vh", width: "95%"};
-var chart = "#chart";
+// var labels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
+// var testd = [1000, 2345, 888, 789, 3456, 7892, 1111, 7321];
+// var theme = ["#05668D", "#028090", "#00A896", "#00A896", "#F0F3BD"];
+// var standard = {height: "75vh", width: "95%"};
+// var chart = "#chart";
 
 
 
@@ -11,7 +11,7 @@ var chart = "#chart";
 ///////////////////////////////////////////////////////////////////
 //Main function to draw a stacked bar chart; based on the draw bar chart function.
 //Takes in a nested array as data, a DOM element as container and a js object as options.
-function drawStackedBarChart(data, element = $(chart), options = standard) {
+function drawStackedBarChart(data, element = $(chart), options = opt) {
 
   //Clears chart
   clearBarChart(element);
@@ -110,7 +110,7 @@ const genStack = (values) => {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //Takes in data: array, options: object, element: DOM element.
 //And generates a bar-chart accordingly.
-function drawBarChart(data, element = $(chart), options = standard) {
+function drawBarChart(data, element = $(chart), options = opt) {
 
   //Clears chart
   clearBarChart(element);
@@ -272,14 +272,14 @@ const genY = (max, num = 10) => {
 
 };
 
-//Function to customize the barchart title.
-const chartTitle = (title = "Bar Chart", color = "#F4F5F2", size = "2em") => {
-  $("#chart-title").html(title);
-  $("#chart-title").css({
-    "color": color,
-    "font-size": size
-  });
-};
+// //Function to customize the barchart title.
+// const chartTitle = (ele, title, color, size) => {
+//   $(id).html(title);
+//   $(id).css({
+//     "color": color,
+//     "font-size": size
+//   });
+// };
 
 //Hover Shadow
 const barShadow = () => {
@@ -311,11 +311,15 @@ const promptCustomize = (id = "custom") => {
   let customize = document.getElementById(id);
 
   if (customize.checked) {
-    $("#chart-title").click((e) => {
-      let title = prompt("Enter new chart title:", $("#chart-title").html());
-      let color = prompt("Enter the hexadecimal, RGB, or color name:", $("#chart-title").css("color"));
-      let size = prompt("Enter new font size:", $("chart-title").css("font-size"));
-      chartTitle(title, color, size);
+    $(".chart-title").click((e) => {
+      let title = prompt("Enter new chart title:", $(e.currentTarget).html());
+      let color = prompt("Enter the hexadecimal, RGB, or color name:", $(e.currentTarget).css("color"));
+      let size = prompt("Enter new font size:", $(e.currentTarget).css("font-size"));
+
+      $(e.currentTarget).html(title);
+      $(e.currentTarget).css("color", color);
+      $(e.currentTarget).css("font-size", size);
+      // chartTitle(title, color, size);
     });
     $(".label").click((e) => {
       let color = prompt("Label/Bar - Please enter the hexadecimal, RGB, or color name:");
@@ -345,7 +349,7 @@ const promptCustomize = (id = "custom") => {
     });
   }
   else {
-    $(".stackedbar, .ivalue, .label, .value, #chart-title").off();
+    $(".stackedbar, .ivalue, .label, .value, .chart-title").off("click");
   }
 }
 
