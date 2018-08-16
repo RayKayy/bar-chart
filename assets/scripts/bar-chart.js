@@ -17,8 +17,11 @@ function drawStackedBarChart(data, element = $(chart), options = opt) {
   clearBarChart(element);
   //Apply options.
   for (let x in options) {
-    $(element).css(x, options[x]);
+    if (options.hasOwnProperty(x)) {
+      $(element).css(x, options[x]);
+    }
   }
+
   //Create base chart array
   let base = genBase(data);
   //Creates and display y-axis
@@ -60,26 +63,26 @@ const styleSBars = (bars, stacked) => {
       });
     }
   }
-}
+};
 
 
 //Append the inner stacked bars matching the main bars.
 const appendSB = (main, stacked) => {
-  for (let b in main) {
+  for (let b = 0; b < main.length; b++) {
     $(main[b]).append(stacked[b]);
   }
-}
+};
 
 //Generate an nested array of DOM elements.
 const genSBars = (sData) => {
 
-let sArr = [];
+  let sArr = [];
 
-for (let a in sData) {
-  sArr.push(genStack(sData[a]));
-}
-return sArr;
-}
+  for (let i = 0;  i < sData.length; i++) {
+    sArr.push(genStack(sData[i]));
+  }
+  return sArr;
+};
 
 //Calculate the total value of each nested array; return an array of those values.
 const genBase = (data) => {
@@ -88,7 +91,7 @@ const genBase = (data) => {
     return a.reduce((t, cv) => {return t + cv});
   });
 return base;
-}
+};
 
 //Generate the inner elements of stacked bars.
 const genStack = (values) => {
@@ -116,7 +119,9 @@ function drawBarChart(data, element = $(chart), options = opt) {
   clearBarChart(element);
   //Apply options.
   for (let x in options) {
-    $(element).css(x, options[x]);
+    if (options.hasOwnProperty(x)) {
+      $(element).css(x, options[x]);
+    }
   }
   //Creates and display y-axis
   let yAxis = genY(getScale(data));
@@ -166,7 +171,7 @@ const styleBars = (arr, scale, step = -1, color = "#B8CEFF") => {
   let value;
   let height;
 
-  for (let i in arr) {
+  for (let i = 0; i < arr.length; i++) {
     value = $($(arr[i]).html()).html();
     height = (value / max) * 100;
     $(arr[i]).css({
@@ -272,14 +277,6 @@ const genY = (max, num = 10) => {
 
 };
 
-// //Function to customize the barchart title.
-// const chartTitle = (ele, title, color, size) => {
-//   $(id).html(title);
-//   $(id).css({
-//     "color": color,
-//     "font-size": size
-//   });
-// };
 
 //Hover Shadow
 const barShadow = () => {
@@ -351,12 +348,7 @@ const promptCustomize = (id = "custom") => {
   else {
     $(".stackedbar, .ivalue, .label, .value, .chart-title").off("click");
   }
-}
-
-
-
-
-
+};
 
 
 
