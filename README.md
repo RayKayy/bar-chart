@@ -1,7 +1,7 @@
 # Bar-chart.js
 ## About
-This simple library allows users to generate simple bar charts within the DOM.
-Integrated event handling of chart elements within the DOM also provide easy customization.
+This simple library allows users to generate simple bar charts within the DOM.  
+Integrated event handling of chart elements within the web browser window also provide easy customization.  
 Can be used on both arrays of integers and nested arrays of integers for standard bar charts and stacked bar charts accordingly.
 
 ## Example Screenshots
