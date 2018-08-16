@@ -19,10 +19,19 @@ Can be used on both arrays of integers and nested arrays of integers for standar
     * `data`: a nested array of integers;  
     * `options`: an object containing properties such as height and width;  
     * `element`: a jQuery DOM element to inject the chart into.  
+3. `styleValue = (pos = "center", color = "black")`
+    * `pos`: string representing where the values should be positioned ("center", "top", "bottom")
+    * `color`: string representing the intended colour of values.
 
 
+## Features
+* Easy to use and scales with browser window.
+* Highly customizable within browser.
+* Stacked bar charts generates the base chart based on the total sum of values.
+* Can add feature to hide stacked bars to show their total value of the stack.
 
-A Feature list of your library (options it supports, etc)
-A list of known issues / bugs
-A list of features that are on the roadmap but haven't been implemented yet
-A list of all the external resources (tutorials, docs, example code, etc) that you encountered and used to help you create this library
+## Acknowledgement
+https://www.w3schools.com/jquery/  
+https://jquery.com/  
+https://stackoverflow.com/  
+https://www.youtube.com/user/TechGuyWeb
